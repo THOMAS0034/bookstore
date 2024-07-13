@@ -1,5 +1,5 @@
 import express from 'express';
-import { book } from './models/bookmodel.js';
+import { book } from '../models/bookmodel.js';
 
 const router = express.Router();
 
@@ -21,9 +21,9 @@ router.post('/', async (request, response) => {
       publishYear: request.body.publishYear,
     };
 
-    const book = await book.create(newBook);
+    const createdBook = await book.create(newBook);
 
-    return response.status(201).send(book);
+    return response.status(201).send(createdBook);
   } catch (error) {
     console.log(error.message);
     response.status(500).send({ message: error.message });
@@ -50,9 +50,9 @@ router.get('/:id', async (request, response) => {
   try {
     const { id } = request.params;
 
-    const book = await book.findById(id);
+    const bookData = await book.findById(id);
 
-    return response.status(200).json(book);
+    return response.status(200).json(bookData);
   } catch (error) {
     console.log(error.message);
     response.status(500).send({ message: error.message });

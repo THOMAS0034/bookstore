@@ -9,7 +9,7 @@ const bookschema=mongoose.Schema({
         type:String,
         required:true,
     },
-    publishyear:{
+    publishYear:{
         type:Number,
         required:true,
     },

@@ -1,36 +1,26 @@
-import express, { response } from "express";
-import { PORT ,URL } from "./config.js";
-import mongoose from "mongoose";
-import {book} from "./models/bookmodel.js";
-import cors from 'cors'
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
+import { PORT, URL } from './config.js'; // Ensure these are correctly set in your config
+import bookRouter from './routes/booksroute.js'; // Ensure this path is correct
 
+const app = express();
 
-const app=express();
+// Middleware
+app.use(cors());
+app.use(express.json());
 
-app.use(
-    cors({
-        origin:'http://localhost:3000',
-        methods:['GET','POST','PUT','DELETE'],
-        allowedHeaders:['Content-Type'],
-    })
-)
+// Use the router
+app.use('/books', bookRouter); // All routes in bookRouter will be prefixed with /books
 
-app.use(express.json())
-
-app.get('/',(req,res)=>{
-    console.log(req)
-});
-
-//Route for new book
-
-mongoose
-.connect(URL)
-.then(()=>{
-    console.log("connected")
-    app.listen(PORT,()=>{
-        console.log(`Server running at port ${PORT}`)
-    })
-})
-.catch((error)=>{
-    console.log(error)
-})
+// Connect to MongoDB and start the server
+mongoose.connect(URL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log("Connected to MongoDB");
+    app.listen(PORT, () => {
+      console.log(`Server running at port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.log(error.message);
+  });
